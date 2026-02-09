@@ -1,26 +1,46 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { createMovieDto } from './dto/create-movie.dto';
+import { updateMovieDto } from './dto/update-movie.dto';
+import { Movie } from './entity/movie.entity';
 
-export interface Movie {
-  id: number;
-  title: string;
-}
 
 @Injectable()
 export class MovieService {
-  private movies: Movie[] = [
-    {
-      id: 1,
-      title: '해리포터',
-    },
-    {
-      id: 2,
-      title: '반지의 제왕',
-    }
+  private movies: Movie[] = [];
+  //   {
+  //     id: 1,
+  //     title: '해리포터',
+  //     genre: 'fantasy'
+  //   },
+  //   {
+  //     id: 2,
+  //     title: '반지의 제왕',
+  //     genre: 'action'
+  //   }
 
-  ];
+  // ];
   private idCounter: number = 3;
+
+  constructor(){
+    const movie1 = new Movie();
+
+    movie1.id = 1;
+    movie1.title = '해리포터';
+    movie1.genre = 'fantasy';
+
+    const movie2 = new Movie();
+
+    movie2.id = 2;
+    movie2.title = '반지의 제왕';
+    movie2.genre = 'action';
+
+    this.movies.push(movie1, movie2)
+  }
+
   
   getManyMovies(title?: string){
+    console.log(this.movies) // Exclude하더라도 실제 값은 들어오고 있다, 보이지 않음
+
     if(!title){
       return this.movies;
     }
@@ -39,10 +59,10 @@ export class MovieService {
   }
 
 
-  postMovie(title: string){
+  postMovie(createMovieDto: createMovieDto){
     const movie: Movie = {
       id: this.idCounter++,
-      title: title
+      ...createMovieDto,
     }
 
     this.movies.push(movie);
@@ -51,7 +71,7 @@ export class MovieService {
   }
 
 
-  patchMovie(id: number, title: string){
+  patchMovie(id: number, updateMovieDto: updateMovieDto){
     // 타입을 지정하지 않아도 자동으로 추론
         const movie = this.movies.find(m=>m.id === id); // 타입 Movie / undefined
     
@@ -61,7 +81,7 @@ export class MovieService {
     
         // Error 핸들링이 없다면 movie는 타입이 확정되지 않은 상태 (Movie / undefined)
         // 여기부턴 Movie 타입으로 확정됨
-        Object.assign(movie, {title}); // 메모리 주소의 객체를 직접 수정, 현재 movie는 복사본
+        Object.assign(movie, updateMovieDto); // 메모리 주소의 객체를 직접 수정, 현재 movie는 복사본
         
         return movie;
   }
