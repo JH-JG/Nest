@@ -1,5 +1,7 @@
 import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, registerDecorator, Validate, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
 import { register } from "module";
+import { createMovieDto } from "./create-movie.dto";
+import { PartialType } from "@nestjs/mapped-types";
 
 // @ValidatorConstraint()
 // class PasswordValidator implements ValidatorConstraintInterface{
@@ -22,29 +24,29 @@ import { register } from "module";
 //     }
 // }
 
-export class updateMovieDto {
-    @IsNotEmpty()
-    @IsOptional()
-    @IsString()
-    title?: string;
+export class updateMovieDto extends PartialType(createMovieDto){
+    // @IsNotEmpty()
+    // @IsOptional()
+    // @IsString()
+    // title?: string;
 
-    @IsNotEmpty()
-    @IsOptional()
-    @IsArray()
-    @IsNumber({},{
-        each: true
-    })
-    genreIds?: number[];
+    // @IsNotEmpty()
+    // @IsOptional()
+    // @IsArray()
+    // @IsNumber({},{
+    //     each: true
+    // })
+    // genreIds?: number[];
 
-    @IsNotEmpty()
-    @IsOptional()
-    @IsString()
-    detail?: string;
+    // @IsNotEmpty()
+    // @IsOptional()
+    // @IsString()
+    // detail?: string;
 
-    @IsNotEmpty()
-    @IsOptional()
-    @IsNumber()
-    directorId?: number
+    // @IsNotEmpty()
+    // @IsOptional()
+    // @IsNumber()
+    // directorId?: number
 
     // @Validate(PasswordValidator, {
     //     message: "다른 에러 메시지"

@@ -9,6 +9,9 @@ import { DirectorModule } from './director/director.module';
 import { Director } from './director/entity/director.entity';
 import { GenreModule } from './genre/genre.module';
 import { Genre } from './genre/entity/genre.entity';
+import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,26 +24,30 @@ import { Genre } from './genre/entity/genre.entity';
         DB_PORT: Joi.number().required(),
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
-        DB_DATABASE: Joi.string().required()
+        DB_DATABASE: Joi.string().required(),
+        HASH_ROUNDS: Joi.number().required(),
+        REFRESH_TOKEN_SECRET: Joi.string().required(),
+        ACCESS_TOKEN_SECRET: Joi.string().required()
       })
     }), // ConfigModule 안에 Config 서비스를 이용하여 TypeOrm에 환경변수를 inject 함 -> 왜?
-    
+
     // 비동기, 왜 비동기인가? ConfigModule IoC 컨데이너에 생성되고 그 값을 입력 받음 -> 즉, 처리되는 동안 대기 해야함
     TypeOrmModule.forRootAsync({
-      useFactory:(configService:ConfigService) => ({
-          type: configService.get<string>('DB_TYPE') as "postgres",
-          host: configService.get<string>('DB_HOST'),
-          port: configService.get<number>('DB_PORT'),
-          username: configService.get<string>('DB_USERNAME'),
-          password: configService.get<string>('DB_PASSWORD'),
-          database: configService.get<string>('DB_DATABASE'),
-          entities: [
-            Movie,
-            MovieDetail,
-            Director,
-            Genre
-          ],
-          synchronize: true,
+      useFactory: (configService: ConfigService) => ({
+        type: configService.get<string>('DB_TYPE') as "postgres",
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        entities: [
+          Movie,
+          MovieDetail,
+          Director,
+          Genre,
+          User
+        ],
+        synchronize: true,
       }),
       inject: [ConfigService]
     }),
@@ -56,7 +63,9 @@ import { Genre } from './genre/entity/genre.entity';
     // }),
     MovieModule,
     DirectorModule,
-    GenreModule
+    GenreModule,
+    UserModule,
+    AuthModule
   ],
 })
 export class AppModule { }
