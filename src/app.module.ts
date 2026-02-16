@@ -3,6 +3,12 @@ import { MovieModule } from './movie/movie.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import Joi from 'joi';
+import { Movie } from './movie/entity/movie.entity';
+import { MovieDetail } from './movie/entity/movie-detail.entity';
+import { DirectorModule } from './director/director.module';
+import { Director } from './director/entity/director.entity';
+import { GenreModule } from './genre/genre.module';
+import { Genre } from './genre/entity/genre.entity';
 
 @Module({
   imports: [
@@ -28,7 +34,12 @@ import Joi from 'joi';
           username: configService.get<string>('DB_USERNAME'),
           password: configService.get<string>('DB_PASSWORD'),
           database: configService.get<string>('DB_DATABASE'),
-          entities: [],
+          entities: [
+            Movie,
+            MovieDetail,
+            Director,
+            Genre
+          ],
           synchronize: true,
       }),
       inject: [ConfigService]
@@ -43,7 +54,9 @@ import Joi from 'joi';
     //   entities: [],
     //   synchronize: true, // 코드와 맞게 DB를 싱크를 맞추는 설정, 실제 프로덕션에서 싱크 설정시 위험함
     // }),
-    MovieModule
+    MovieModule,
+    DirectorModule,
+    GenreModule
   ],
 })
 export class AppModule { }

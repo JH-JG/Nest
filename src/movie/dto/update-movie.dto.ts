@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, registerDecorator, Validate, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, registerDecorator, Validate, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
 import { register } from "module";
 
 // @ValidatorConstraint()
@@ -25,11 +25,26 @@ import { register } from "module";
 export class updateMovieDto {
     @IsNotEmpty()
     @IsOptional()
+    @IsString()
     title?: string;
 
     @IsNotEmpty()
     @IsOptional()
-    genre?: string;
+    @IsArray()
+    @IsNumber({},{
+        each: true
+    })
+    genreIds?: number[];
+
+    @IsNotEmpty()
+    @IsOptional()
+    @IsString()
+    detail?: string;
+
+    @IsNotEmpty()
+    @IsOptional()
+    @IsNumber()
+    directorId?: number
 
     // @Validate(PasswordValidator, {
     //     message: "다른 에러 메시지"
